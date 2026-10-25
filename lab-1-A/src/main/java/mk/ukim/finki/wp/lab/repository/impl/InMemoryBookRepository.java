@@ -6,6 +6,7 @@ import mk.ukim.finki.wp.lab.repository.BookRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Repository
@@ -21,5 +22,32 @@ public class InMemoryBookRepository implements BookRepository {
                 .filter(b -> b.getTitle().toLowerCase().contains(text.toLowerCase())
                 && b.getAverageRating() >= rating)
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public Optional<Book> findById(Long id) {
+        return DataHolder.books.stream().filter(b -> b.getId().equals(id)).findFirst();
+    }
+
+    @Override
+    public Book save(Book book) {
+        Book existingBook = findById(book.getId()).orElse(null);
+
+        if(existingBook != null){
+            existingBook.setTitle(book.getTitle());
+            existingBook.setGenre(book.getGenre());
+            existingBook.setAverageRating(book.getAverageRating());
+            existingBook.setAuthor(book.getAuthor());
+
+            return existingBook;
+        }
+
+        DataHolder.books.add(book);
+        return book;
+    }
+
+    @Override
+    public void deleteById(Long id) {
+        DataHolder.books.removeIf(b -> b.getId().equals(id));
     }
 }

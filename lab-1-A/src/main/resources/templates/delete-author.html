@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Delete author</title>
+</head>
+<body>
+<form method="post" th:action="@{'/authors/delete/{id}' (id=${id})}">
+    <div class="container">
+        <h1>Delete Book</h1>
+        <p th:text="'Are you sure you want to delete ' + ${author.name} + ' ' + ${author.surname} + '?'"></p>
+
+        <div class="clearfix">
+            <a href="/authors">
+                <button type="button">Cancel</button>
+            </a>
+            <button type="submit">Delete</button>
+        </div>
+    </div>
+</form>
+</body>
+</html>
